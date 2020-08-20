@@ -7,12 +7,16 @@ from google.cloud.bigquery import Client, QueryJobConfig
 
 
 class ApiClient(object):
-    def __init__(self, credentials_path=None, location=None):
+    def __init__(self, credentials_path=None, location=None, credentials = None, project = None):
         self.credentials_path = credentials_path
         self.location = location
+        self.credentials = credentials
+        self.project = project
+
+        if self.credentials:
+            self.Client = Client(project = self.project, credentials = self.credentials)
         if self.credentials_path:
-            self.client = Client.from_service_account_json(
-                self.credentials_path, location=self.location)
+            self.client = Client.from_service_account_json(self.credentials_path, location=self.location)
         else:
             self.client = Client(location=self.location)
 

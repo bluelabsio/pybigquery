@@ -19,6 +19,7 @@ from sqlalchemy.engine.base import Engine
 from sqlalchemy.sql.schema import Column
 from sqlalchemy.sql import elements
 import re
+import json
 
 from .parse_url import parse_url
 
@@ -304,7 +305,7 @@ class BigQueryDialect(DefaultDialect):
                 'https://www.googleapis.com/auth/cloud-platform',
                 'https://www.googleapis.com/auth/drive'
             )
-        credentials = credentials.with_scopes(scopes)
+        # credentials = credentials.with_scopes(scopes)
 
         self._add_default_dataset_to_job_config(default_query_job_config, project_id, self.dataset_id)
 
@@ -323,9 +324,10 @@ class BigQueryDialect(DefaultDialect):
         self.credentials_path = credentials_path or self.credentials_path
         self.dataset_id = dataset_id
 
-        if self.credentials_path:
-            credentials = service_account.Credentials.from_service_account_file(self.credentials_path)
-            client = self._create_client_from_credentials(credentials, default_query_job_config, project_id)
+        if self.credentials_path: #Replaced credentials_path object with credentials themselves
+
+            #credentials = service_account.Credentials.from_service_account_file(self.credentials_path)
+            client = self._create_client_from_credentials(self.credentials_path, default_query_job_config, project_id)
 
         elif self.credentials_info:
             credentials = service_account.Credentials.from_service_account_info(self.credentials_info)
