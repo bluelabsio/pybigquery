@@ -54,11 +54,14 @@ To specify location of your datasets pass ``location`` to ``create_engine()``:
 Table names
 ___________
 
-To query tables from non-default projects, use the following format for the table name: ``project.dataset.table``, e.g.:
+To query tables from non-default projects or datasets, use the following format for the SQLAlchemy schema name: ``[project.]dataset``, e.g.:
 
 .. code-block:: python
 
-    sample_table = Table('bigquery-public-data.samples.natality')
+    # If neither dataset nor project are the default
+    sample_table_1 = Table('natality', schema='bigquery-public-data.samples')
+    # If just dataset is not the default
+    sample_table_2 = Table('natality', schema='bigquery-public-data')
 
 Batch size
 __________
@@ -85,7 +88,7 @@ When using a default dataset, don't include the dataset name in the table name, 
 
     table = Table('table_name')
 
-Note that specyfing a default dataset doesn't restrict execution of queries to that particular dataset when using raw queries, e.g.:
+Note that specifying a default dataset doesn't restrict execution of queries to that particular dataset when using raw queries, e.g.:
 
 .. code-block:: python
 
@@ -101,7 +104,7 @@ ____________________________
 
 There are many situations where you can't call ``create_engine`` directly, such as when using tools like `Flask SQLAlchemy <http://flask-sqlalchemy.pocoo.org/2.3/>`_. For situations like these, or for situations where you want the ``Client`` to have a `default_query_job_config <https://googlecloudplatform.github.io/google-cloud-python/latest/bigquery/generated/google.cloud.bigquery.client.Client.html#google.cloud.bigquery.client.Client>`_, you can pass many arguments in the query of the connection string.
 
-The ``credentials_path``, ``location``, and ``arraysize`` parameters are used by this library, and the rest are used to create a `QueryJobConfig <https://googlecloudplatform.github.io/google-cloud-python/latest/bigquery/generated/google.cloud.bigquery.job.QueryJobConfig.html#google.cloud.bigquery.job.QueryJobConfig>`_
+The ``credentials_path``, ``credentials_info``, ``location``, and ``arraysize`` parameters are used by this library, and the rest are used to create a `QueryJobConfig <https://googlecloudplatform.github.io/google-cloud-python/latest/bigquery/generated/google.cloud.bigquery.job.QueryJobConfig.html#google.cloud.bigquery.job.QueryJobConfig>`_
 
 Note that if you want to use query strings, it will be more reliable if you use three slashes, so ``'bigquery:///?a=b'`` will work reliably, but ``'bigquery://?a=b'`` might be interpreted as having a "database" of ``?a=b``, depending on the system being used to parse the connection string.
 

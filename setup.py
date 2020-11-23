@@ -7,9 +7,10 @@ def readme():
     with io.open("README.rst", "r", encoding="utf8") as f:
         return f.read()
 
+
 setup(
     name="pybigquery",
-    version='0.4.15',
+    version='0.5.0',
     description="SQLAlchemy dialect for BigQuery",
     long_description=readme(),
     long_description_content_type="text/x-rst",
